@@ -5,22 +5,62 @@ Thank you Miran Lipovača!
 ### Contents
 * [Lesson 1 - Starting Out](/lesson1_startingOut)
 
+
+### The repl
+* Start with `ghci`.
+* Load and _compile_ a source code file into the process' address space - `:l <file_path>`.
+* Reload currently linked files - `:r`.
+* Display the type of a piece of data - `:t <data>`. `<data>` can also be a function name.
+
 ### General Notes
 * Two function types:
   - _prefix_ which is like a traditional function name followed by arguments (`fx_name A B C`). The function is prefix to the data.
   - _infix_ which is like an _operator_ such as `A + B`. The function is _inbetween_ the data. With backticks, we can make a binomial function an _infix_ (`div A B` --> `A \`div\` B`).
+  - Functions/operators of only special characters (`+`, `*`, `/=` ...) are considered _infix_ by default. To write them as _prefix_ we must surround them in parentheses, `(+) 1 2` gives 3.
+  - _polymorphic_ when a function uses a _type variable_ and therefore has a loose declaration.
 * Some translations from C:
   - `!=` --> `/=`
   - Functions without arguments --> `#define` and are immutable.
   - array --> list - use when you have an arbitrary amount of a type of data.
   - struct --> tuple - use when you have data representing a specific thing (like a coordinate).
 * Datatypes:
-  - boolean `True` or `False`
-  - integer `7` (will adapt to float in cases like `1 + 1.0`)
-  - float `3.14`
-  - character `'a'`
-  - list (an object) `[1,2,3]`
-  - string `"abc"` or `['s','b','c']` --> list of character
+  - All hard data types (not variable) have capitalized names.
+  - Boolean `True` or `False` (primitive)
+  - Int `7` (will adapt to float in cases like `1 + 1.0`), bound to [-2147483648, 2147483648]. (primitive)
+  - Integer (has no bound but less efficient) (_primitive_).
+  - Num
+  - Float `3.14`(primitive)
+  - Double (as expected, float with double the precision) (primitive).
+  - Fractional
+  - Char `'a'` (primitive)
+  - List `[1,2,3]` (_primitive_)
+  - Tuple `(1,2,'a')` (_primitive_)
+  - Ordering `LT`, `GT` or `EQ` (essentially an enum to denote order).
+  - String `"abc"` or `['s','b','c']` --> list of character (`[Char]`)
+  - type variable (some letter like `'a', 'b', ...`) is like a void pointer, could be anything.
+    - e.g. `:t fst` gives `fst :: (a,b) -> a` which means the return value has the same type as the first value.
+* Type Classes:
+  - These are interfaces that types may implement such that they can be used with functions that have _class constraints_.
+  - e.g. `:t (==)` gives `(==) :: (Eq a) => a -> a -> Bool`.
+    - The second part of `a -> a -> Bool` just means the 2 args must have the same type and the return value is a Boolean.
+    - The first part of `(Eq a) =>` is a _class constraint_ saying that `a` needs to have the type class for `Eq`.
+    - `:t elem` --> `(Eq a) => a -> [a] -> Bool` since it uses `(==)` to determine if an element is in a list.
+    - `Eq` supported types implement `==` and `/=`.
+    - `Ord` supported types implement `>`, `>=`, `<=`, `<` (ordering stuff). Requires that `Eq` is already satisfied.
+    - `Show` supported types can be printed (output in String form). To print, use `show 3` --> `"3"`.
+    - `Read` (accompanied with function `read`) is the opposite of `Show`. `read` is basically `eval` (Ruby). e.g. `read "3" + 2` gives 5.
+      - Function `read` is a bit special. `:t read` is `read :: (Read a) => String -> a which means the return value is void.
+      - If we don't use it directly with another defined type, it won't know how to interpret the returned value.
+      - To solve this, we use a _type annotation_ which declares how we want the output to be interpreted. e.g. `read "3" :: Int` gives 3.
+    - `Enum` are sequentially ordered. Can use `succ`, `pred`, etc.
+    - `Bounded` are types with bounds. They are polymorphic since they work on many types. `minBound :: Int` --> `-9223372036854775808`, `minBound :: Char` --> `'\NUL'`.
+    - `Num` are _number like_ classes. Requires that `Eq` and `Show` already comply.
+    - `Integral`, as expected, is whole numbers and contains `Int` and `Integer`.
+    - `Floating` includes `Float` and `Double`.
+  - `fromIntegral` is a function to turn (cast) an Integral type into a `Num` so that you can use it with `Floating`. While a piece of data, say `5`, might have a strictest definition of something like `Int` it can be treated with broader definitions right up to type classes themselves which are just interfaces (like `Num`).
+* Declarations:
+  - You can explicitly declare the IO types of a function (the mapping type) before writing out the function (likes headers in C) (see [def.hs](def.hs)).
+  - The difference between `Int -> Int -> Int` and `Int, Int -> Int` is ...
 * Function syntax:
   - `<function name> arg1 arg2 arg3 = <stuff with args>`
   - Function names must start with a lowercase character because ...
