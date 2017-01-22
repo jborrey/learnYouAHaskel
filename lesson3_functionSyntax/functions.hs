@@ -32,10 +32,61 @@ second2 [_]    = error "Fail 1"
 second2 [_, b] = b
 -- The failure here is that [1,2] is a non-exhaustive input, cannot pattern match the tail.
 
--- "As Pattern" example.
-middle :: [a] -> a
-middle []     = ""         -- even length list
-middle (a:[]) = a          -- odd length list
-middle a = tail (init a)   -- recurse
+-- pattern matching to make a "middle" function.
+middle :: [a] -> [a]
+middle []     = []                -- even length list
+middle (a:[]) = [a]               -- odd length list
+middle a = middle (tail (init a)) -- recurse
 
---middle input@(_:b:_) = 
+-- gaurds example
+printSign :: (RealFloat a) => a -> String
+printSign a
+  | a < 0     = "negative"
+  | a == 0    = "zero"
+  | a > 0     = "positive"
+  | otherwise = "NAN"
+
+-- big or small area
+areaSize :: (RealFloat a) => a -> a -> String
+areaSize a b
+  | area < 100 = "small"
+  | otherwise    = "big"
+  where area = a * b
+
+-- initials function with pattern matchins
+initials :: String -> String -> String
+initials firstname lastname = [f] ++ "." ++ [l] ++ "."
+  where (f:_) = firstname
+        (l:_) = lastname
+
+-- where binding a function
+coincap :: (RealFloat a) => [(a, a)] -> [a]
+coincap coins = [ marketCap price numCoins | (price, numCoins) <- coins]
+  where marketCap p nc = p * nc
+
+-- let binding as a block
+coneVol :: (RealFloat a) => a -> a -> a
+coneVol r h = 
+  let baseArea = pi * (r^2)
+      adjustedHeight = (1/3) * h
+  in  baseArea * adjustedHeight
+
+-- let binding as a crammed expression
+rectVol :: (RealFloat a) => a -> a -> a -> a
+rectVol l w h = let base = l * h in base * h
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -12,11 +12,11 @@ Thank you Miran Lipovača!
 * Reload currently linked files - `:r`.
 * Display the type of a piece of data - `:t <data>`. `<data>` can also be a function name.
 
-### General Notes
+## General Notes
 
 #### Two function types:
   - _prefix_ which is like a traditional function name followed by arguments (`fx_name A B C`). The function is prefix to the data.
-  - _infix_ which is like an _operator_ such as `A + B`. The function is _inbetween_ the data. With backticks, we can make a binomial function an _infix_ (`div A B` → ``A `div` B``).
+  - _infix_ which is like an _operator_ such as `A + B`. The function is _inbetween_ the data. With backticks, we can usa a binomial function as an _infix_ or even define _infix_ functions(`div A B` → ``A `div` B``).
   - Functions/operators of only special characters (`+`, `*`, `/=` ...) are considered _infix_ by default. To write them as _prefix_ we must surround them in parentheses, `(+) 1 2` gives 3.
   - _polymorphic_ when a function uses a _type variable_ and therefore has a loose declaration.
 
@@ -98,33 +98,31 @@ A _type classes_ is a are interfaces that types may implement such that they can
 - `length` returns the number (integer) of elements in the list.
 - `null` returns `True` if the list is empty.
 - `reverse` reverses a list.
-- `take <int> <list>` returns the first <int> number elements for <list>.
-- `drop <int> <list>` returns <list> without the first <int> elements.
+- `take <int> <list>` returns the first \<int> number elements for \<list>.
+- `drop <int> <list>` returns \<list> without the first \<int> elements.
 - `minimum` returns the min element.
 - `maximum` returns the max element.
 - `sum` returns the sum of all the elements.
 - `product` is the production of all elements.
-- `A \`elem\` B` tells us if `A` is in the list `B`.
+- ``A `elem` B`` tells us if `A` is in the list `B`.
 - `[A..B]` returns all sequential elements (if that is defined) from `A` to `B`.
 - `[A,B..C]` returns a linear spacing of `A` to `C` with step size of deduced as `B-A`. Floats in these devices often have funky precision errors.
 - `cycle` returns an infinite repetition of the list (flattened).
 - `repeat <element>` returns an infinite list of the element or is the same as `cycle [<element>]`.
 - `replicate A B` returns a list of length `A` with every element being `B`.
-- We can write _list comprehensions_ or _mappings_ like so `[x*x | x <- [1..5]`  which returns `[1,4,9,16,15]`.
+- We can write _list comprehensions_ or _mappings_ like so `[x*x | x <- [1..5]]`  which returns `[1,4,9,16,15]`.
   - Predicates can be added (aka _filtering_). `[x*x | x <- [1..5], even (x*x)]` gives all the even squares.
   - Multiple predicates/filters can be added. `[x*x | x <- [1..10], even (x*x), x*x < 50]` gives `[4,16,36]`.
-- You should see by now that lists are a way to implement _loops_. This is also true when it comes to double loops where supply 2 lists.
+- You should see by now that list comprehensions are a way to implement _loops_. This is also true when it comes to double loops where we supply 2 lists.
   - `[x*y | x <- [1,2,3], y <- [2,2,0]]` gives `[2,2,0,4,4,0,6,6,0]`.
   - A loop is required to compute length, but the element-iterator is not used in the mapping so we denote it as `_`. `length' x = sum[1 | _ <- x]
 
 ## Laziness:
-- Haskell will operate on actual data and evaluate expressions only when absolutely necessary.
-- We can define infinite lists like `take 5 [1..]`. `[1..]` never finishes computing but since `take 3` requires only a piece, it will finish and return `[1,2,3]`.
+- Haskell will operate on actual data and evaluate expressions only when absolutely necessary (when it needs to make a decision).
+- We can define infinite lists like `take 3 [1..]`. `[1..]` never finishes computing but since `take 3` requires only a piece, it will finish and return `[1,2,3]`.
 
 ## Tuples:
 - Length and types (at each index) define the type of tuple.
-- They can be inhomogeneous.
-- Denoted by parentheses like `(1,2)` or `('a','b','c')`.
 - There is no _empty_ or _null_ tuple.
 - Comparators are defined.
 - `fst x` returns the first _component_ of tuple `x`.
@@ -152,10 +150,17 @@ A _type classes_ is a are interfaces that types may implement such that they can
 [(a,b,c) | c <- [1..10], b <- [1..c], a <- [1..b], a^2 + b^2 == c^2, a+b+c == 24]
 ```
 
-## Pattern Matching:
+## Pattern Matching, Guards, Lets & Cases:
 - These are concise _case_ statments.
 - They should alwasys have a _catch all_ claws at the end to ensure they don't throw exceptions from non-exhaustive pattern input.
 - _as patterns_ are patterns which are matched but you also get a reference to the original input - `all@(pieces:of:all)`.
+- Guards are the pattern matching version of boolean checks. If one is true, we output that clause.
+- We can also name things in guards and define them later (`where` keyword).
+- _where bindings_ can even be defined by pattern matching (see the _initials_ function).
+- _where bindings_ can also defined entire fuctions which can then be called during the function's block.
+- _where bindings_ are local to the function but _let bindings_ are local to only an expression in the function.
+- _let_ syntax is `let <bindings> in <expression>`. Because they are _expressions_ you can cram these anywhere in code.
+- We also have a _case_ expression (which is really what pattern matchin is) and it can be thrown in anywhere.
 
 ## Follow ups
   - Do infinite recursions in haskell stay memory constant as a result of lazy evaluation? Run an experiement with 1 C program and 1 haskell program that both leave out the base case. For haskell, this may simply be an infinite loop.
