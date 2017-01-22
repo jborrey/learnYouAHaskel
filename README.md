@@ -2,6 +2,8 @@
 
 Thank you Miran Lipovača!
 
+_You do computations in Haskell by declaring what something is, instead of declaring how to get to it._
+
 ### Contents
 * [Lesson 1 - Starting Out](/lesson1_startingOut)
 
@@ -162,5 +164,37 @@ A _type classes_ is a are interfaces that types may implement such that they can
 - _let_ syntax is `let <bindings> in <expression>`. Because they are _expressions_ you can cram these anywhere in code.
 - We also have a _case_ expression (which is really what pattern matchin is) and it can be thrown in anywhere.
 
-## Follow ups
-  - Do infinite recursions in haskell stay memory constant as a result of lazy evaluation? Run an experiement with 1 C program and 1 haskell program that both leave out the base case. For haskell, this may simply be an infinite loop.
+## Recursion - see lesson4\_recursion/recurion.hs
+
+## Higher Order Functions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
